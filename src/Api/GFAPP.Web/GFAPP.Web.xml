@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GFAPP.Web</name>
+    </assembly>
+    <members>
+        <member name="T:GFAPP.Web.AutoMapperRegister">
+            <summary>
+            automapper注册
+            </summary>
+        </member>
+        <member name="T:GFAPP.Web.Controllers.AccountController">
+            <summary>
+            账户
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.AccountController.Register(GFAPP.Model.Authentication.Users.Dtos.UserRegisterInput)">
+            <summary>
+            注册
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.AccountController.Info(System.String)">
+            <summary>
+            获取用户信息
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.AccountController.ChangePassword(GFAPP.Model.Account.Dtos.ChangePasswordInput)">
+            <summary>
+            修改密码
+            </summary>
+        </member>
+        <member name="T:GFAPP.Web.Controllers.CompanyController">
+            <summary>
+            企业
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.CompanyController.GetPagedCompany(GFAPP.Model.Company.Dtos.GetPagedCompanyInput)">
+            <summary>
+            获取待办任务列表
+            </summary>
+        </member>
+        <member name="T:GFAPP.Web.Controllers.EleDuplicateController">
+            <summary>
+            电子联单
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.GetById(System.Int32)">
+            <summary>
+            根据id查找
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.Delete(System.Int32)">
+            <summary>
+            删除联单
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.newELe(GFAPP.Model.EleDuplicate.Dtos.EleDuplicateCreateDto)">
+            <summary>
+            联单创建
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.ProcessedBack(System.Int32)">
+            <summary>
+            经营单位退回
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.ProcessedSubmit(GFAPP.Model.EleDuplicate.Dtos.EleDuplicateAcceptInput)">
+            <summary>
+            联单接收
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.GetHomeMissions">
+            <summary>
+            获取首页待办任务
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.GetPagedMission(GFAPP.Model.EleDuplicate.Dtos.GetPagedMissionInput)">
+            <summary>
+            获取待办任务列表
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.GetPagedFinished(GFAPP.Model.EleDuplicate.Dtos.GetPagedMissionInput)">
+            <summary>
+            获取已办任务列表
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.SMSController.#ctor(GFAPP.Application.SMS.ISMSService)">
+            <summary>
+            短信
+            </summary>
+            <param name="iSMSServicel"></param>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.SMSController.SendVerifyCode(GFAPP.Model.SMS.Dtos.SMSSendInput)">
+            <summary>
+            发送验证码
+            </summary>
+        </member>
+        <member name="T:GFAPP.Web.Core.ResponseWrapper">
+            <summary>
+            包装api返回结果
+            </summary>
+        </member>
+        <member name="T:AuthorizationServer.Controllers.TokenController">
+            <summary>
+            token
+            </summary>
+        </member>
+        <member name="M:AuthorizationServer.Controllers.TokenController.#ctor(Microsoft.Extensions.Options.IOptions{GFAPP.Model.Authentication.Jwt.Audience},GFAPP.Application.Jwt.ITokenService,Microsoft.AspNetCore.Identity.UserManager{GFAPP.Model.Authentication.Users.UserInfo},Microsoft.AspNetCore.Identity.SignInManager{GFAPP.Model.Authentication.Users.UserInfo},GFAPP.EntityFramework.ApplicationDbContext,Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole})">
+            <summary>
+            token
+            </summary>
+        </member>
+        <member name="M:AuthorizationServer.Controllers.TokenController.AuthAsync(GFAPP.Model.Authentication.Jwt.JwtInput)">
+            <summary>
+            验证
+            </summary>
+            <param name="JwtInput"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
