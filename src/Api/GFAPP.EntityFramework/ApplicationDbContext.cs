@@ -1,6 +1,8 @@
 ﻿using GFAPP.Model.Authentication.Jwt;
 using GFAPP.Model.Authentication.Users;
+using GFAPP.Model.CodeGenerator;
 using GFAPP.Model.Company;
+using GFAPP.Model.Districts;
 using GFAPP.Model.IndSludge;
 using GFAPP.Model.Record;
 using GFAPP.Model.Signature;
@@ -17,7 +19,8 @@ namespace GFAPP.EntityFramework
         public DbSet<EleDuplicateInfo> EleDuplicates { get; set; }
         public DbSet<RecordInfo> Records { get; set; }
         public DbSet<SignatureInfo> Signatures { get; set; }
-
+        public DbSet<DistrictInfo> Districts { get; set; }
+        public DbSet<CodeGeneratorInfo> CodeGenerators { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 

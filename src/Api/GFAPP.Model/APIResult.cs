@@ -11,6 +11,11 @@ namespace GFAPP.Model
         {
 
         }
+        public ApiResult(string message)
+            : this(false)
+        {
+            this.message = message;
+        }
 
         public ApiResult(string message, string error)
             : this(false)
@@ -30,6 +35,12 @@ namespace GFAPP.Model
             this.data = data;
         }
 
+        public ApiResult(object data, int total)
+            :this(data)
+        {
+            this.total = total;
+        }
+
         /// <summary>
         /// 是否成功
         /// </summary>
@@ -44,6 +55,8 @@ namespace GFAPP.Model
         /// 数据
         /// </summary>
         public object data { get; set; }
+
+        public int total { get; set; }
 
         public string error { get; set; }
     }

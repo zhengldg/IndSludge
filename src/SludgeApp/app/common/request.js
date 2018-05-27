@@ -14,19 +14,33 @@ export function get(url, params) {
             url: url,
             params: params,
             headers: {
-                Authorization: 'Bearer ' + token.access_token || ''
+                Authorization: 'Bearer ' + (token && token.access_token)
             }
         })
             .then(function (response) {
-                if (response.status == 200) {
-                    return response.data;
-                }
-                return response;
+                console.log('************post:', response);
+                return response.data;
             })
             .catch(function (error) {
-                console.log(error);
+                var response = error.response;
+                return handErrorResponse(response);
             });
     });
+}
+
+function handErrorResponse(reaponse) {
+    if (response.status == 400) {
+        Alert.alert(response.data.message || '请求无效');
+        return response.data || {}
+    }
+    else if (response.status == 404) {
+        Alert.alert(response.data.message || '访问的资源不存在');
+        return response.data || {}
+    }
+    else {
+        Alert.alert(response.data.message || '服务器发生错误，请稍后再试');
+        return response.data || {}
+    }
 }
 
 export function post(url, body) {
@@ -37,17 +51,16 @@ export function post(url, body) {
             url: url,
             data: body,
             headers: {
-                Authorization: 'Bearer ' + token.access_token || '',
-                Accept: 'application/json'
+                Authorization: 'Bearer ' + (token && token.access_token)
             }
         })
             .then(function (response) {
-                if (response.status == 200) {
-                    return response.data;
-                }
+                console.log('************post:', response);
+                return response.data;
             })
             .catch(function (error) {
-                console.log(error);
+                var response = error.response;
+                return handErrorResponse(response);
             });
     });
 }

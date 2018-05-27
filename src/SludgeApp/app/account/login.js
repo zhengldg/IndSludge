@@ -111,8 +111,8 @@ export default class Login extends Component {
               </Body>
             </Right>
           </ListItem>
-          <Button  block rounded style={styles.loginBtn} onPress={this._login}>
-            <Text>登录</Text>
+          <Button block rounded style={styles.loginBtn} onPress={this._login}>
+            <Text style={{color:'#fff'}}>登录</Text>
           </Button>
         </Content>
         <Image

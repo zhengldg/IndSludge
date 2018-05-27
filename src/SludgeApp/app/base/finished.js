@@ -29,11 +29,11 @@ class Finished extends Component {
                             <Text style={styles.tip}>{this.props.tip || '操作成功'}</Text>
                         </Body>
                         <Button block rounded style={styles.backBtn} onPress={this._clickFinished}>
-                            <Text>{this.props.btnText || '返回'}</Text>
+                            <Text style={{ color: '#fff' }}>{this.props.btnText || '返回'}</Text>
                         </Button>
                     </Card>
                 </Content>
-            </Container>
+            </Container >
         );
     }
 }

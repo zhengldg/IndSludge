@@ -15,10 +15,11 @@ export const Toast = {
         NToast.show(Object.assign(this.defaultOption, { type: 'success' }, options))
     },
     warn(options) {
-        NToast.show(Object.assign(this.defaultOption, { type: 'warning' }, options))
+        Alert.alert('提醒', options.text);
+        // NToast.show(Object.assign(this.defaultOption, { type: 'warning' }, options))
     },
     danger(options) {
-        NToast.show(Object.assign(this.defaultOption, { type: 'danger' }, options))
+        Alert.alert('提醒', options.text);
     }
 }
 

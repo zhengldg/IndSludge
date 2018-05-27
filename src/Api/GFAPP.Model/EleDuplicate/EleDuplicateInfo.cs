@@ -185,5 +185,10 @@ namespace GFAPP.Model.IndSludge
         /// 修改时间
         /// </summary>
         public DateTime ? ModifiedTime { get; set; }
+
+        /// <summary>
+        /// 退回原因
+        /// </summary>
+        public string BackReason { get; set; }
     }
 }

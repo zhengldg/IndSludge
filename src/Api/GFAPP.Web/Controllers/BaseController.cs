@@ -8,6 +8,7 @@ using GFAPP.Model;
 using FluentValidation;
 using GFAPP.Framework;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -37,7 +38,7 @@ namespace GFAPP.Web.Controllers
                 string message = string.Join("|", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
                 var result = new ApiResult() { success = false, message= "输入验证失败", error = message };
 
-                context.Result = new JsonResult(result);
+                context.Result = Ok(result);
             }
         }
     }

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GFAPP.EntityFramework\GFAPP.EntityFramework.csproj" />
     <ProjectReference Include="..\GFAPP.Framework\GFAPP.Framework.csproj" />
     <ProjectReference Include="..\GFAPP.Model\GFAPP.Model.csproj" />
   </ItemGroup>

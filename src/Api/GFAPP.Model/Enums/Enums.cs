@@ -35,6 +35,7 @@ namespace GFAPP.Model.Enums
         Carring = 2, //启运
         [Display(Name = "经营单位退回")]
         Backed = 3, //经营单位退回
+        [Display(Name ="联单结束")]
         Finished = 4 // 结束
     }
 
@@ -48,11 +49,17 @@ namespace GFAPP.Model.Enums
 
     public enum HandingWays
     {
+        [Display(Name = "焚烧")]
         Burning = 1, // 焚烧
+        [Display(Name = "水泥窑洞")]
         ConcreteCava = 2, //水泥窑洞
+        [Display(Name = "堆肥")]
         TheCompost = 3, // 堆肥的
+        [Display(Name = "制砖")]
         MakingBricks = 4, // 制砖
+        [Display(Name = "填埋")]
         Landfill = 5,//填埋
+        [Display(Name = "其他")]
         Other = 10 // 其他
     }
 

@@ -61,12 +61,27 @@
             联单创建
             </summary>
         </member>
-        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.ProcessedBack(System.Int32)">
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.GetCreate(System.Int32)">
+            <summary>
+            返回创建联单信息
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.ProcessedBack(GFAPP.Model.EleDuplicate.Dtos.BackInput)">
             <summary>
             经营单位退回
             </summary>
         </member>
-        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.ProcessedSubmit(GFAPP.Model.EleDuplicate.Dtos.EleDuplicateAcceptInput)">
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.GetProcess(System.Int32)">
+            <summary>
+            返回接收联单信息
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.Detail(System.Int32)">
+            <summary>
+            返回接收联单信息
+            </summary>
+        </member>
+        <member name="M:GFAPP.Web.Controllers.EleDuplicateController.ProcessedSubmit(GFAPP.Model.EleDuplicate.Dtos.EleDuplicateAcceptDto)">
             <summary>
             联单接收
             </summary>

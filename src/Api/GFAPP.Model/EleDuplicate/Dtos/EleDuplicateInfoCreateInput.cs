@@ -25,16 +25,34 @@ namespace GFAPP.Model.EleDuplicate.Dtos
         [Required(ErrorMessage = "请选择经营单位")]
         public int? ProcessedCompanyId { get; set; }
 
+        public int ? CityId { get; set; }
+
+        /// <summary>
+        /// 城市名称
+        /// </summary>
+        public string CityName { get; set; }
+
+        /// <summary>
+        /// 运输企业
+        /// </summary>
+        public string CarryingCompanyName { get; set; }
+
+        /// <summary>
+        /// 经营企业
+        /// </summary>        
+        /// public string ProcessedCompany { get; set; }
+        public string ProcessedCompanyName { get; set; }
+
         /// <summary>
         /// 转运数量
         /// </summary>
         [Required(ErrorMessage = "请填写转运数量")]
-        public double? Quantity { get; set; }
+        public double Quantity { get; set; }
 
         /// <summary>
         /// 转运数量含水率
         /// </summary>
-        public int? QuantityPercentageOfMoisture { get; set; }
+        public int QuantityPercentageOfMoisture { get; set; }
 
         /// <summary>
         /// 经办人签名Base64

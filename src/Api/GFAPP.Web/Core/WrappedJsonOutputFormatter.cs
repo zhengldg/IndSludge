@@ -16,7 +16,7 @@ namespace GFAPP.Web.Core
 
         public override Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
         {
-            if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.OK)
+            if (context.HttpContext.Response.StatusCode == (int)HttpStatusCode.OK && context.ObjectType != typeof(ApiResult))
             {
                 var @object = new ApiResult(context.Object) ;
 

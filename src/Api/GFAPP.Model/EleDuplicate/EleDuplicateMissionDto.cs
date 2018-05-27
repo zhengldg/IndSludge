@@ -11,6 +11,8 @@ namespace GFAPP.Model.EleDuplicate
     {
         public int Id { get; set; }
 
+        public string CityName { get; set; }
+
         /// <summary>
         /// 联单编号
         /// </summary>
@@ -24,18 +26,19 @@ namespace GFAPP.Model.EleDuplicate
         /// <summary>
         /// 产生企业
         /// </summary>
-        public string GeneratedCompany { get; set; }
+        public string GeneratedCompanyName { get; set; }
 
         /// <summary>
         /// 运输企业
         /// </summary>
-        public string CarryingCompany { get; set; }
+        public string CarryingCompanyName { get; set; }
 
         /// <summary>
         /// 经营企业
         /// </summary>        
         /// public string ProcessedCompany { get; set; }
-        public string ProcessedCompany{ get; set; }
+        public string ProcessedCompanyName{ get; set; }
+
 
         /// <summary>
         /// 联单状态
@@ -48,9 +51,23 @@ namespace GFAPP.Model.EleDuplicate
         public double? Quantity { get; set; }
 
         /// <summary>
+        /// 实际接收数量
+        /// </summary>
+        public double? ActualQuantity { get; set; }
+
+        /// <summary>
         /// 出发时间
         /// </summary>
         public DateTime? DepartureTime { get; set; }
 
+        /// <summary>
+        /// 确认接收时间
+        /// </summary>
+        public DateTime ? TimeOfProcessedSubmit { get; set; }
+
+        /// <summary>
+        /// 退回原因
+        /// </summary>
+        public string BackReason { get; set; }
     }
 }

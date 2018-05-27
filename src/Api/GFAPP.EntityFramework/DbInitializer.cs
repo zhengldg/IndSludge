@@ -1,5 +1,7 @@
 ﻿using GFAPP.Model.Authentication.Users;
+using GFAPP.Model.CodeGenerator;
 using GFAPP.Model.Company;
+using GFAPP.Model.Districts;
 using GFAPP.Model.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +24,33 @@ namespace GFAPP.EntityFramework
 
             var r = new Random();
 
+            var citys = new List<DistrictInfo>();
+            citys.Add(new DistrictInfo() { Code = "320501", Name = "姑苏区", Order = 1 });
+            citys.Add(new DistrictInfo() { Code = "320502", Name = "姑苏区", Order = 2 });
+            citys.Add(new DistrictInfo() { Code = "320503", Name = "姑苏区", Order = 3 });
+            citys.Add(new DistrictInfo() { Code = "320504", Name = "姑苏区", Order = 4 });
+            citys.Add(new DistrictInfo() { Code = "320505", Name = "姑苏区", Order = 5 });
+            citys.Add(new DistrictInfo() { Code = "320506", Name = "姑苏区", Order = 6 });
+            citys.Add(new DistrictInfo() { Code = "320507", Name = "姑苏区", Order = 7 });
+            citys.Add(new DistrictInfo() { Code = "320514", Name = "姑苏区", Order = 14 });
+            citys.Add(new DistrictInfo() { Code = "320581", Name = "姑苏区", Order = 81 });
+            citys.Add(new DistrictInfo() { Code = "320582", Name = "姑苏区", Order = 82 });
+            citys.Add(new DistrictInfo() { Code = "320583", Name = "姑苏区", Order = 83 });
+            citys.Add(new DistrictInfo() { Code = "320584", Name = "姑苏区", Order = 84 });
+            citys.Add(new DistrictInfo() { Code = "320585", Name = "姑苏区", Order = 85 });
+
+            var eleCodeGen = new List<CodeGeneratorInfo>();
+            foreach(var city in citys)
+            {
+                eleCodeGen.Add(new CodeGeneratorInfo()
+                {
+                  Code = city.Code,
+                  Format = "#CODE##YEAR##NUMBER#",
+                  NumberLength = 4,
+                  Type = CodeGeneratorType.EleDuplicate
+                });
+            }
+
             var company1 = new CompanyInfo()
             {
                 Name = "广西崇左市湘桂糖业有限公司",
@@ -29,7 +58,8 @@ namespace GFAPP.EntityFramework
                 Contact = "覃浩华",
                 LegalPerson = "张三",
                 Address = "广西崇左市江州区新和镇新和华侨农场",
-                CompanyType = CompanyType.Produce
+                CompanyType = CompanyType.Produce,
+                City = citys[0]
             };
 
 
@@ -41,7 +71,8 @@ namespace GFAPP.EntityFramework
                 Contact = "朱麟希",
                 LegalPerson = "李四",
                 Address = "柳州市燎原路7号",
-                CompanyType = CompanyType.Transport
+                CompanyType = CompanyType.Transport,
+                City = citys[1]
             };
 
             var company3 = new CompanyInfo()
@@ -52,12 +83,15 @@ namespace GFAPP.EntityFramework
                 TelephoneNumber = "0772-3138881",
                 Contact = "刘文州",
                 Address = "柳州市燎原路7号",
-                CompanyType = CompanyType.Transport
+                CompanyType = CompanyType.Process,
+                City = citys[2]
             };
 
             context.Companys.Add(company1);
             context.Companys.Add(company2);
             context.Companys.Add(company3);
+            context.Districts.AddRange(citys);
+            context.CodeGenerators.AddRange(eleCodeGen);
             context.SaveChanges();
 
             // app端登录账号

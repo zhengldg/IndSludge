@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, AsyncStorage, StyleSheet, View, Text, Image, Alert, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Container, Header, Content, Item, Button, Input, Icon, ListItem, CheckBox, Body, Grid, Col, Row, Label, Right, Form, Radio, CardItem, Card, Left, ActionSheet } from 'native-base';
+import { Container, Header, Content, Item, Button, Input, ListItem, CheckBox, Body, Grid, Col, Row, Label, Right, Form, Radio, CardItem, Card, Left, ActionSheet } from 'native-base';
 import Finished from '../base/finished'
 import { get, post } from '../common/request'
 import { tokenMgr, userMgr, AsyncStore, Alt, Toast } from '../common/util'
@@ -9,6 +9,8 @@ import Companys from '../base/companys'
 import DatePicker from 'react-native-datepicker'
 import Signature from '../base/signature'
 import appStyles from '../styles'
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 const width = Dimensions
     .get('window')
     .width
@@ -55,11 +57,11 @@ class RegisterComp extends Component {
                 carryingCompanyName: '',
                 processedCompanyId: '',
                 processedCompanyName: '',
-                quantity: '',
-                quantityPercentageOfMoisture: '',
-                ceneratedOperatorSignBase64: '',
+                quantity: 0,
+                quantityPercentageOfMoisture: 0,
+                ceneratedOperatorSignBase64: null,
                 generatedOperatorMobilePhone: '',
-                departureTime: '2018-04-25',
+                departureTime: '',
             }
         }
     }
@@ -145,7 +147,6 @@ class RegisterComp extends Component {
                                 Alert.alert('提交失败', x.message);
                             }
                         }).catch(x => {
-                            Toast.danger('提交失败，请检查网络连接是否正常');
                         }).done(x => {
                             self.setState({ loading: false });
                         });
@@ -166,7 +167,6 @@ class RegisterComp extends Component {
                 Alert.alert('提交失败', x.message);
             }
         }).catch(x => {
-            Toast.danger('提交失败，请检查网络连接是否正常');
         }).done(x => {
             this.setState({ loading: false });
         });
@@ -226,13 +226,13 @@ class RegisterComp extends Component {
                         </Item>
                         <Item style={styles.item} >
                             <Label style={styles.label}>转运数量：</Label>
-                            <Input placeholder="请输入转运数量" value={form.quantity} keyboardType={'numeric'} onChangeText={(txt) => {
+                            <Input placeholder="请输入转运数量" value={form.quantity.toString()} onChangeText={(txt) => {
                                 this._updateForm('quantity', txt);
                             }} />
                         </Item>
                         <Item style={styles.item} >
                             <Label style={styles.label}>含水率(%)：</Label>
-                            <Input placeholder="请输入含水率" value={form.quantityPercentageOfMoisture} keyboardType={'numeric'} onChangeText={(txt) => {
+                            <Input placeholder="请输入含水率" value={form.quantityPercentageOfMoisture.toString()} keyboardType={'numeric'} onChangeText={(txt) => {
                                 this._updateForm('quantityPercentageOfMoisture', txt);
                             }} />
                         </Item>
@@ -246,7 +246,7 @@ class RegisterComp extends Component {
                                 style={{ width: 200 }}
                                 mode="datetime"
                                 placeholder="请选择"
-                                format="YYYY-MM-DD HH:MM"
+                                format="YYYY-MM-DD HH:mm"
                                 onDateChange={(date) => { this._updateForm('departureTime', date) }}
                             />
                         </Item>
@@ -256,11 +256,15 @@ class RegisterComp extends Component {
                                 <View style={[appStyles.grayBorder, { height: 40, margin: 3, width: 140 }]} onPress={() => {
                                     this.setState({ signVisible: true });
                                 }} >
-                                    <Image resizeMode='stretch' style={{
-                                        flex: 1
-                                    }} source={{ uri: this.state.form.ceneratedOperatorSignBase64 }}></Image>
+                                    <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.5} onPress={() => {
+                                        this.setState({ signVisible: true });
+                                    }} >
+                                        <Image resizeMode='stretch' style={{
+                                            flex: 1
+                                        }} source={{ uri: this.state.form.ceneratedOperatorSignBase64 }}></Image>
+                                    </TouchableOpacity>
                                 </View>
-                                <Icon style={{ marginLeft: 5 }} type="FontAwesome" name="hand-pointer-o" onPress={() => {
+                                <Icon size={20} style={{ marginLeft: 5 }} type="FontAwesome" name="pinterest" onPress={() => {
                                     this.setState({ signVisible: true });
                                 }} />
                             </View>
@@ -282,7 +286,7 @@ class RegisterComp extends Component {
                     </Form>
                     <View style={styles.btnGrounp}>
                         <Button disabled={this.state.loading} block rounded style={styles.saveBtn} onPress={this._save}>
-                            <Text>提交</Text></Button>
+                            <Text style={{ color: '#fff' }}>提  交</Text></Button>
                     </View>
                 </Content>
             </Container>);
@@ -307,7 +311,7 @@ const styles = StyleSheet.create({
     , label: {
         fontWeight: 'bold'
     },
-    saveBtn: { width: 150, marginHorizontal: 10, },
+    saveBtn: { width: 300, marginHorizontal: 10, },
     item: {
     },
     formContainer: {

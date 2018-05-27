@@ -1,4 +1,5 @@
 ﻿using GFAPP.Application.Account;
+using GFAPP.Application.CodeGenerator;
 using GFAPP.Application.Jwt;
 using GFAPP.Application.SMS;
 using GFAPP.EntityFramework;
@@ -28,7 +29,6 @@ using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Buffers;
 using System.IO;
-using System.Net;
 using System.Text;
 
 namespace GFAPP.Web
@@ -49,6 +49,7 @@ namespace GFAPP.Web
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ISMSService, SMSService>();
             services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<ICodeGeneratorService, CodeGeneratorService>();
             services.Configure<QiniuConfig>(Configuration.GetSection("Config:Qiniu"));
             services.Configure<LuosimaoConfig>(Configuration.GetSection("Config:Luosimao"));
             services.Configure<Audience>(Configuration.GetSection("Audience"));
@@ -71,7 +72,8 @@ namespace GFAPP.Web
                 var jsonSettings = new JsonSerializerSettings
                 {
                     NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    DateFormatString = "yyyy-MM-dd HH:mm:ss"
                 };
                 options.OutputFormatters.RemoveType<JsonOutputFormatter>();
                 options.OutputFormatters.Add(new WrappedJsonOutputFormatter(jsonSettings, ArrayPool<char>.Shared));
@@ -117,8 +119,6 @@ namespace GFAPP.Web
             app.UseMvc();
 
             DbInitializer.Initialize(dbContext, userManager);
-
-
         }
 
         private void ConfigureJwtAuthService(IServiceCollection services)

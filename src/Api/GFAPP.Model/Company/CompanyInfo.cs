@@ -1,4 +1,5 @@
-﻿using GFAPP.Model.Enums;
+﻿using GFAPP.Model.Districts;
+using GFAPP.Model.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,6 +22,14 @@ namespace GFAPP.Model.Company
         /// 社会信用代码
         /// </summary>
         public string UnifiedCode { get; set; }
+
+        /// <summary>
+        /// 城市
+        /// </summary>
+        [ForeignKey("CityId")]
+        public DistrictInfo City { get; set; }
+
+        public int? CityId { get; set; }
 
         /// <summary>
         /// 单位名称
@@ -50,21 +59,6 @@ namespace GFAPP.Model.Company
         /// 企业地址
         /// </summary>
         public string Address { get; set; }
-
-        /// <summary>
-        /// 省份
-        /// </summary>
-        public string Province { get; set; }
-
-        /// <summary>
-        /// 市
-        /// </summary>
-        public string City { get; set; }
-
-        /// <summary>
-        /// 区县
-        /// </summary>
-        public string District { get; set; }
 
         /// <summary>
         /// 企业类型

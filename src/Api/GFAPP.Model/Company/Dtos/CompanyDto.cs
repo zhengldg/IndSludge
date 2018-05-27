@@ -19,6 +19,11 @@ namespace GFAPP.Model.Company.Dtos
         public string Name { get; set; }
 
         /// <summary>
+        /// 城市名称
+        /// </summary>
+        public string CityName { get; set; }
+
+        /// <summary>
         /// 法人
         /// </summary>
         public string LegalPerson { get; set; }
@@ -41,21 +46,6 @@ namespace GFAPP.Model.Company.Dtos
         /// 企业地址
         /// </summary>
         public string Address { get; set; }
-
-        /// <summary>
-        /// 省份
-        /// </summary>
-        public string Province { get; set; }
-
-        /// <summary>
-        /// 市
-        /// </summary>
-        public string City { get; set; }
-
-        /// <summary>
-        /// 区县
-        /// </summary>
-        public string District { get; set; }
 
         /// <summary>
         /// 企业类型

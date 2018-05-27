@@ -34,7 +34,7 @@ namespace GFAPP.Web.Controllers
         {
             int skipCount = (input.PageIndex - 1) * input.PageSize;
 
-            var query = dbContext.Companys.AsQueryable();
+            var query = dbContext.Companys.Include(x=>x.City).AsQueryable();
             if(!string.IsNullOrWhiteSpace(input.Key))
             {
                 query = query.Where(x => x.Name.Contains(input.Key) || x.LegalPerson.Contains(input.Key));
@@ -46,7 +46,7 @@ namespace GFAPP.Web.Controllers
             int total = await query.CountAsync();
             if (string.IsNullOrWhiteSpace(input.SortField))
             {
-                query = query.OrderBy(x => x.District);
+                query = query.OrderBy(x => x.CityId);
             }
 
             query = query.Skip(skipCount).Take(input.PageSize);

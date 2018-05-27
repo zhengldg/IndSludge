@@ -24,7 +24,7 @@ class MyListItem extends Component {
                     <View style={styles.itemLeft}><Icon name="ios-home-outline" /></View>
                     <View style={styles.itemRight}>
                         <Text style={styles.title}>{item.name}</Text>
-                        <Text note>{item.address}  {item.contractor}</Text>
+                        <Text note>{item.address}  {item.cityName}  {item.contact}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -184,7 +184,7 @@ export default class Companys extends Component {
             >
                 <View style={styles.container}>
                     <View style={[styles.modalContent]}>
-                        <Item >
+                        <Item>
                             <Input placeholder="请输入企业名称\联系人" value={this.state.key}
                                 onChangeText={x => {
                                     this.setState({ key: x }, y => {

@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import {
     View,
+    Alert,
     Text,
     StyleSheet,
     Image,
@@ -12,6 +13,7 @@ import {
 } from 'react-native';
 import { Container, Header, Icon, Content, CardItem, List, ListItem, Left, Body, Right, Thumbnail, H3, Item, Input, Button, Card, Footer, Title } from 'native-base';
 import { get, post } from '../common/request'
+import moment from 'moment'
 
 var width = Dimensions
     .get('window')
@@ -55,13 +57,18 @@ class Home extends Component {
         var items = [];
         this.state.todoList.forEach(x => {
             items.push((
-                <ListItem onPress={() => {
+                <ListItem key={x.id} onPress={() => {
                     this._editManifest(x);
                 }}>
                     <Thumbnail style={styles.itemThum} source={require('./img/icon_fqld.png')} />
                     <Body style={{ marginLeft: 5 }}>
                         <Text>联单号码：{x.code}</Text>
+                        <Text note>发运时间：{moment(x.departureTime).format('YYYY-MM-DD HH:mm')}</Text>
                         <Text note>当前状态：{x.state}  转运数量(吨)：{x.quantity} </Text>
+                        {
+                            x.state == '经营单位退回'
+                            && <Text style={{ color: '#f5222d', textAlign: 'left' }}>原因：{x.backReason}</Text>
+                        }
                     </Body>
                 </ListItem>));
         })
@@ -85,7 +92,7 @@ class Home extends Component {
                     </View>
                     <List style={{ height: height - 480 }} >
                         {
-                            this.state.todoList.length > 0 ?
+                            this.state.todoList && this.state.todoList.length > 0 ?
                                 this.renderToDoList()
                                 :
                                 <View>
@@ -98,17 +105,29 @@ class Home extends Component {
                         <View style={styles.splitLine}></View>
                     </View>
                     <CardItem style={{ marginTop: 20 }}>
-                        <Body style={{ alignItems: 'center' }}>
-                            <Thumbnail square source={require('./img/icon_dbld.png')} />
-                            <Text style={styles.txtMenu}>待办联单</Text>
+                        <Body style={{ alignItems: 'center' }} >
+                            <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                                this.props.navigation.navigate('TaskList');
+                            }}>
+                                <Thumbnail square source={require('./img/icon_dbld.png')} />
+                                <Text style={styles.txtMenu}>待办联单</Text>
+                            </TouchableOpacity>
                         </Body>
                         <Body style={{ alignItems: 'center' }}>
-                            <Thumbnail square source={require('./img/icon_lsld.png')} />
-                            <Text style={styles.txtMenu}>历史联单</Text>
+                            <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                                this.props.navigation.navigate('FinishedList');
+                            }}>
+                                <Thumbnail square source={require('./img/icon_lsld.png')} />
+                                <Text style={styles.txtMenu}>历史联单</Text>
+                            </TouchableOpacity>
                         </Body>
                         <Body style={{ alignItems: 'center' }}>
-                            <Thumbnail square source={require('./img/icon_set.png')} />
-                            <Text style={styles.txtMenu}>系统设置</Text>
+                            <TouchableOpacity activeOpacity={0.5} onPress={() => {
+                                this.props.navigation.navigate('Setting');
+                            }}>
+                                <Thumbnail square source={require('./img/icon_set.png')} />
+                                <Text style={styles.txtMenu}>系统设置</Text>
+                            </TouchableOpacity>
                         </Body>
                     </CardItem>
                 </Content>

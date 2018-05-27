@@ -15,6 +15,8 @@ import { Root } from 'native-base'
 import NavApp from './navApp'
 
 type Props = {};
+console.disableYellowBox = true;
+console.warn('YellowBox is disabled.');
 export default class App extends Component<Props> {
   render() {
     return (
