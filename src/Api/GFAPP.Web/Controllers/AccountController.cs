@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GFAPP.Application;
+using GFAPP.Framework;
 using GFAPP.Framework.Caching;
 using GFAPP.Model;
 using GFAPP.Model.Account.Dtos;
@@ -24,12 +25,14 @@ namespace GFAPP.Web.Controllers
     {
         private readonly UserManager<UserInfo> userManager;
         private readonly ICacheManager cacheManager;
+        private readonly IAppSession session;
 
         public AccountController(UserManager<UserInfo> userManager
-            ,ICacheManager cacheManager)
+            ,ICacheManager cacheManager, IAppSession Session)
         {
             this.userManager = userManager;
             this.cacheManager = cacheManager;
+            this.session = Session;
         }
 
         /// <summary>
@@ -66,11 +69,11 @@ namespace GFAPP.Web.Controllers
         /// 获取用户信息
         /// </summary>
         [HttpGet("info")]
-        [Authorize]
+        //[Authorize]
         public async Task<ApiResult> Info(string username)
         {
             ApiResult result = new ApiResult();
-            var user = await userManager.FindByNameAsync(username);
+            var user = await userManager.FindByNameAsync(username??session.Username);
             if (user != null)
             {
                 result.data = Mapper.Map<UserInfoDto>(user);
