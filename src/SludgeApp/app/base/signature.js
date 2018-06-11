@@ -1,32 +1,36 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Modal, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
+import Modal from "react-native-modal";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SignatureCapture from 'react-native-signature-capture';
 const PropTypes = require('prop-types');
+import appStyles from '../styles'
 
-var width = Dimensions
+const width = Dimensions
     .get('window')
-    .width
+    .width;
+const height = Dimensions
+    .get('window')
+    .height;
 
 class Signature extends Component {
     static propTypes = {
         ok: PropTypes.func,
-        visible: PropTypes.bool
+        imgBase64: PropTypes.string
     }
 
     static defaultProps = {
-        visible: false
+        imgBase64: null
     };
 
     constructor(props) {
         super(props)
         this.state = {
-            visible: props.visible,
+            visible: false,
             clear: true
         }
     }
-
 
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -36,7 +40,6 @@ class Signature extends Component {
 
     _ok = () => {
         this.refs["sign"].saveImage();
-        // this.setState({ visible: false })
     }
 
     _cancel = () => {
@@ -51,7 +54,8 @@ class Signature extends Component {
     }
 
     _onSaveEvent = (result) => {
-        this.props.ok && this.props.ok(result)
+        const base64String = `data:image/png;base64,${result.encoded}`;
+        this.props.ok && this.props.ok(base64String)
     }
 
     _onDragEvent = () => {
@@ -60,41 +64,69 @@ class Signature extends Component {
         })
     }
 
+    _setModelVisible(visible) {
+        this.setState({
+            visible: visible
+        })
+    }
+
     render() {
         return (
-            <Modal
-                animationType={"slide"}
-                transparent={false}
-                visible={this.state.visible}
-                onRequestClose={() => { alert("Modal has been closed.") }}
-            >
-                <View style={styles.container}>
-                    <Text style={{ color: '#313131', marginTop: 60, marginVertical: 10, textAlign: 'left' }}>请输入签名</Text>
-                    <View style={{ width: width * 0.9, height: 200, borderRadius: 3, borderColor: '#5a5a5a', borderWidth: StyleSheet.hairlineWidth}}>
-                        <SignatureCapture
-                            style={[styles.signature]}
-                            ref="sign"
-                            onDragEvent={this._onDragEvent}
-                            onSaveEvent={this._onSaveEvent}
-                            saveImageFileInExtStorage={true}
-                            showNativeButtons={false}
-                            showTitleLabel={false}
-                            viewMode={"portrait"} />
+            <View style={{ ...this.props.style }}>
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={[appStyles.grayBorder, { height: 40, margin: 3, width: 140 }]} >
+                        <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.5} onPress={() => {
+                            this._setModelVisible(true);
+                        }} >
+                            <Image resizeMode='stretch' style={{
+                                flex: 1
+                            }} source={{ uri: this.props.imgBase64 }}></Image>
+                        </TouchableOpacity>
                     </View>
-                    <View style={{ height: 80, flexDirection: "row", justifyContent: 'center', alignItems: 'center' }}>
-                        <View style={styles.btn} >
-                            <Icon.Button name="times-circle" backgroundColor="#3b5998" onPress={this._cancel}>
-                                {this.state.clear ? "关闭" : '清除'}
-                            </Icon.Button>
-                        </View>
-                        <View style={styles.btn} >
-                            <Icon.Button name="check" backgroundColor="#3b5998" onPress={this._ok}>
-                                确定
-  </Icon.Button>
-                        </View>
-                    </View>
+                    <Icon size={30} style={{ marginLeft: 5 }} type="FontAwesome" name="pencil-square-o" onPress={() => {
+                        this._setModelVisible(true);
+                    }} />
                 </View>
-            </Modal>
+
+                <Modal
+                    onBackdropPress={this._cancel}
+                    backdropOpacity={0.5}
+                    isVisible={this.state.visible}
+                >
+                    <View style={styles.container}>
+                        <View style={{
+                            backgroundColor: 'white',
+                            height: 320,
+                            width: width - 100,
+                            padding: 2,
+                            borderRadius: 4,
+                            borderColor: "rgba(0, 0, 0, 0.1)"
+                        }}>
+                            <SignatureCapture
+                                style={{ flex: 1 }}
+                                ref="sign"
+                                onDragEvent={this._onDragEvent}
+                                onSaveEvent={this._onSaveEvent}
+                                saveImageFileInExtStorage={true}
+                                showNativeButtons={false}
+                                showTitleLabel={false}
+                                viewMode={"portrait"} />
+                            <View style={{ borderTopColor: '#d9d9d9', borderTopWidth: StyleSheet.hairlineWidth, borderStyle: 'solid', height: 60, flexDirection: "row", justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <View style={styles.btn} >
+                                    <Icon.Button name="times-circle" backgroundColor="#3b5998" onPress={this._cancel}>
+                                        {this.state.clear ? "关闭" : '清除'}
+                                    </Icon.Button>
+                                </View>
+                                <View style={styles.btn} >
+                                    <Icon.Button name="check" backgroundColor="#3b5998" onPress={this._ok}> 确定</Icon.Button>
+                                </View>
+                            </View>
+                        </View>
+
+                    </View>
+                </Modal>
+            </View>
+
         );
     }
 }
@@ -106,13 +138,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    signature: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: 'blue'
-    },
     btn: {
-        marginHorizontal: 10
+        marginRight: 20
     }
 });
 

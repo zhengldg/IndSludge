@@ -2,14 +2,9 @@ import React, { Component } from 'react';
 import { Platform, AsyncStorage, StyleSheet, View, Text, Image, Alert, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Container, Header, Content, Item, Button, Input, Icon, ListItem, CheckBox, Body, Label, Right, Form } from 'native-base';
 import Finished from '../base/finished'
-import Companys from '../base/companys'
 import { get, post } from '../common/request'
 import { tokenMgr, userMgr, AsyncStore, Alt, Toast } from '../common/util'
-import Modal from "react-native-modal";
-
-const width = Dimensions
-    .get('window')
-    .width
+import Companys from '../base/companys'
 
 export default class Register extends Component {
     constructor(props) {
@@ -127,7 +122,7 @@ class RegisterComp extends Component {
     }
 
     _onSelectedCompany = (item) => {
-        this.setState({ CompanyInfoId: item.id, companyInfoName: item.name, isModalVisible: false })
+        this.setState({ CompanyInfoId: item.id, companyInfoName: item.name })
     }
 
     _getVerifyCode = () => {
@@ -149,7 +144,6 @@ class RegisterComp extends Component {
     render() {
         return (
             <Container >
-                <Companys onSelected={this._onSelectedCompany} isModalVisible={this.state.isModalVisible} ></Companys>
                 <Content style={styles.formContainer}>
                     {
                         this.state.loading && <ActivityIndicator size="large" style={{ position: 'absolute', alignSelf: 'center' }} />
@@ -188,7 +182,7 @@ class RegisterComp extends Component {
                         </Item>
                         <Item style={styles.item}  >
                             <Label style={styles.label}>所在企业：</Label>
-                            <Input placeholder="请选择企业" onFocus={this._selectCompany} value={this.state.companyInfoName} />
+                            <Companys style={{ flex: 1 }} text={this.state.companyInfoName} onSelected={this._onSelectedCompany}></Companys>
                         </Item>
                         <Item style={styles.item}  >
                             <Label style={styles.label}>密码：</Label>

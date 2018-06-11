@@ -33,7 +33,8 @@ export default StyleSheet.create({
         padding: 10,
     },
     itemLeft: {
-        width: 30
+        width: 30,
+        margin:10
     },
     itemRight: {
         flexDirection: 'column',

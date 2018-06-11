@@ -8,6 +8,7 @@ import TaskList from './app/eleDuplicate/tasklist'
 import FinishedList from './app/eleDuplicate/finishedlist'
 import EleDuplicateDetail from './app/eleDuplicate/detail'
 import Setting from './app/setting/setting'
+import Location from './app/map/location'
 
 import { StackNavigator } from 'react-navigation'
 var NavApp = StackNavigator({
@@ -70,10 +71,16 @@ var NavApp = StackNavigator({
     navigationOptions: {
       title: '系统设置'
     }
+  },
+  Location: {
+    screen: Location,
+    navigationOptions: {
+      title: '我的位置'
+    }
   }
 },
   {
-    initialRouteName: 'Setting',
+    initialRouteName: 'Login',
     navigationOptions: {
       headerBackTitle: '返回',
       headerStyle: {

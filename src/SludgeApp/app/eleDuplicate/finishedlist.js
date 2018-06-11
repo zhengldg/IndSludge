@@ -16,7 +16,6 @@ var width = Dimensions
         .get('window')
         .height
 
-
 class MyListItem extends Component {
     _onPress = () => {
         this.props.onPressItem(this.props.item);
@@ -28,10 +27,10 @@ class MyListItem extends Component {
         return (
             <TouchableOpacity onPress={this._onPress} activeOpacity={0.5} key={item.id.toString()} >
                 <View style={[styles.item]}>
-                    <View style={styles.itemLeft}><Image style={{ width: 45, height: 45 }} source={require('../home/img/icon_fqld.png')} /></View>
+                    <View style={styles.itemLeft}><Image style={{ width: 50, height: 50 }} source={require('./img/icon_ybj.png')} /></View>
                     <View style={styles.itemRight}>
                         <Text style={styles.title}>联单号码：{item.code} </Text>
-                        <Text note>转运数量(吨)：{item.quantity}  实际接收量(吨)：{item.actualQuantity}</Text>
+                        <Text note>转运数量(吨)：{item.quantity}       实际接收量(吨)：{item.actualQuantity}</Text>
                         <Text note>办结时间：{moment(item.timeOfProcessedSubmit).format("YYYY-MM-DD HH:mm")} </Text>
                     </View>
                 </View>
@@ -44,7 +43,6 @@ const comPager = {
     pageSize: 15,
     pageIndex: 1,
     total: 0,
-    isRequest: false,
     hasNextPage() {
         return (this.pageIndex - 1) * this.pageSize < this.total;
     }
@@ -74,7 +72,11 @@ export default class TaskList extends Component {
         this._search();
     }
 
-    _keyExtractor = (item, index) => item.id;
+    componentWillUnmount() {
+        this.keyTimer && clearTimeout(this.keyTimer);
+    }
+
+    _keyExtractor = (item, index) => item.id.toString();
 
 
     _onPressItem = (item) => {
@@ -92,7 +94,6 @@ export default class TaskList extends Component {
     );
 
     _requestData = (type) => {
-        comPager.isRequest = true;
         var params = Object.assign({ pageSize: comPager.pageSize, pageIndex: comPager.pageIndex, key: this.state.key });
         return get('eleDuplicate/pagedFinished', params)
             .then(x => {
@@ -112,7 +113,6 @@ export default class TaskList extends Component {
             })
             .catch(x => {
             }).done(x => {
-                comPager.isRequest = false;
             })
     }
 
@@ -125,12 +125,19 @@ export default class TaskList extends Component {
         this.props.onSelected && this.props.onSelected(this.state.selected);
     }
 
-    _loadMore = () => {
-        if (!comPager.isRequest) {
+    _loadMore = (info) => {
+        console.log(info);
+        if (this.onEndReachedCalledDuringMomentumFlag === false) {
+            console.log(comPager.pageIndex)
             if (comPager.hasNextPage()) {
                 this._requestData('more');
             }
+            this.onEndReachedCalledDuringMomentumFlag = true;
         }
+    }
+
+    onEndReachedCalledDuringMomentum = () => {
+        this.onEndReachedCalledDuringMomentumFlag = false;
     }
 
     _editManifest = (item) => {
@@ -152,23 +159,33 @@ export default class TaskList extends Component {
         return (<View style={[appStyles.itemDivider]} ></View>)
     }
 
+    _keyChanged = (x) => {
+        this.setState({ key: x });
+        this.keyTimer && clearTimeout(this.keyTimer);
+        this.keyTimer = setTimeout(y => {
+            this._search();
+        }, 1000)
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <Item style={{ paddingHorizontal: 15 }}>
                     <Input placeholder="请输入企业名称\联单号码" value={this.state.key}
                         onChangeText={x => {
-                            this.setState({ key: x });
+                            this._keyChanged(x);
                         }} />
                     <Icon name="search" size={20} onPress={this._search} />
                 </Item>
                 <FlatList
+                    onScrollBeginDrag={this.onEndReachedCalledDuringMomentum.bind(this)}
                     data={this.state.data}
                     extraData={this.state}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem}
                     ItemSeparatorComponent={this._renderDivider}
-                    onEndReached={this._loadMore} onEndReachedThreshold={0.5}
+                    onEndReached={this._loadMore.bind(this)}
+                    onEndReached={this._loadMore.bind(this)} onEndReachedThreshold={0.01}
                     ListEmptyComponent={this.emptyComponent}
                 />
             </View>
@@ -179,8 +196,7 @@ export default class TaskList extends Component {
 // define your styles
 const styles = StyleSheet.create({
     container: {
-        height: height,
-        width: width,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -194,7 +210,7 @@ const styles = StyleSheet.create({
         padding: 15,
     },
     itemLeft: {
-        width: 60
+        width: 60,
     },
     itemRight: {
         flex: 1,

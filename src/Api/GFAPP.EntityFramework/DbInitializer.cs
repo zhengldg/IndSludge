@@ -77,7 +77,7 @@ namespace GFAPP.EntityFramework
 
             var company3 = new CompanyInfo()
             {
-                Name = "柳州市安源危险品运输有限责任公司",
+                Name = "广西金太阳有限责任公司",
                 UnifiedCode = "",
                 LegalPerson = "王五",
                 TelephoneNumber = "0772-3138881",

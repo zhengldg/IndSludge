@@ -55,8 +55,6 @@ const comPager = {
 }
 
 export default class TaskList extends Component {
-    isRequest = false;
-
     static propTypes = {
         parentParams: PropTypes.object,
         isModalVisible: PropTypes.bool
@@ -95,7 +93,7 @@ export default class TaskList extends Component {
         this._search();
     }
 
-    _keyExtractor = (item, index) => item.id;
+    _keyExtractor = (item, index) => item.id.toString();
 
 
     _onPressItem = (item) => {
@@ -148,12 +146,18 @@ export default class TaskList extends Component {
         this.props.onSelected && this.props.onSelected(this.state.selected);
     }
 
-    _loadMore = () => {
-        if (!comPager.isRequest) {
+    _loadMore = (info) => {
+        if (this.onEndReachedCalledDuringMomentumFlag === false) {
+            console.log(comPager.pageIndex)
             if (comPager.hasNextPage()) {
                 this._requestData('more');
             }
+            this.onEndReachedCalledDuringMomentumFlag = true;
         }
+    }
+
+    onEndReachedCalledDuringMomentum = () => {
+        this.onEndReachedCalledDuringMomentumFlag = false;
     }
 
     _editManifest = (item) => {
@@ -162,6 +166,14 @@ export default class TaskList extends Component {
         } else if (item.state == '经营单位退回') {
             this.props.navigation.navigate('EleDuplicateAddOrEdit', { id: item.id });
         }
+    }
+
+    _keyChanged = (x) => {
+        this.setState({ key: x });
+        this.keyTimer && clearTimeout(this.keyTimer);
+        this.keyTimer = setTimeout(y => {
+            this._search();
+        }, 1000)
     }
 
     emptyComponent = () => {
@@ -185,17 +197,18 @@ export default class TaskList extends Component {
                 <Item style={{ paddingHorizontal: 15 }}>
                     <Input placeholder="请输入企业名称\联单号码" value={this.state.key}
                         onChangeText={x => {
-                            this.setState({ key: x });
+                            this._keyChanged(x);
                         }} />
                     <Icon name="search" size={20} onPress={this._search} />
                 </Item>
                 <FlatList
+                onScrollBeginDrag={this.onEndReachedCalledDuringMomentum.bind(this)}
                     data={this.state.data}
                     extraData={this.state}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem}
                     ItemSeparatorComponent={this._renderDivider}
-                    onEndReached={this._loadMore} onEndReachedThreshold={0.5}
+                    onEndReached={this._loadMore.bind(this)} onEndReachedThreshold={0.01}
                     ListEmptyComponent={this.emptyComponent}
                 />
             </View>

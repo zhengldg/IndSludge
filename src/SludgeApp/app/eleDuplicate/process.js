@@ -330,26 +330,8 @@ class RegisterComp extends Component {
                         </Item>
                         <Item style={styles.item} >
                             <Label style={styles.label}>接收人签名：</Label>
-                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                                <View style={[appStyles.grayBorder, { height: 40, margin: 3, width: 140 }]}>
-                                    <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.5} onPress={() => {
-                                        this.setState({ signVisible: true });
-                                    }} >
-                                        <Image resizeMode='stretch' style={{
-                                            flex: 1
-                                        }} source={{ uri: this.state.form.processedOperatorSignBase64 }}></Image>
-                                    </TouchableOpacity>
-                                </View>
-                                <Icon style={{ marginLeft: 5 }} size={20} type="FontAwesome" name="pinterest" onPress={() => {
-                                    this.setState({ signVisible: true });
-                                }} />
-                            </View>
-                            <Signature style={{ flex: 0 }} visible={this.state.signVisible} ok={(sign) => {
-                                const base64String = `data:image/png;base64,${sign.encoded}`;
-                                this.setState({
-                                    signVisible: false
-                                })
-                                this._updateForm('processedOperatorSignBase64', base64String)
+                            <Signature style={{ flex: 1 }} imgBase64={form.ceneratedOperatorSignBase64} ok={(base64) => {
+                                this._updateForm('processedOperatorSignBase64', base64)
                             }}>
                             </Signature>
                         </Item>

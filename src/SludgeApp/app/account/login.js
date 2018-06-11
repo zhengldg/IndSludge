@@ -36,27 +36,29 @@ export default class Login extends Component {
       Alert.alert('请输入用户名');
       return;
     }
+    this.setState({ logining: true });
     get('token/auth', {
       userName: this.state.userName,
       password: this.state.password,
       grant_type: 'password'
     }).then(x => {
       if (x.success) {
-        this.setState({ logining: true });
+
         tokenMgr.setToken(x.data)
-        userMgr.setCurrent({ userName: this.state.userName })
         var memembeUser = { userName: this.state.userName }
         if (this.state.remembeMe) {
           memembeUser.password = this.state.password;
           memembeUser.remembeMe = true;
         }
-        AsyncStore.setObj('remembeUser', memembeUser);
-        // Toast.show({
-        //   text: "登录成功",
-        //   type: "success",
-        //   position: 'top'
-        // });
-        this.props.navigation.navigate('Home');
+        AsyncStore.setObj(userMgr.getRemembeKey(), memembeUser);
+        get('u/info').then(rsp => {
+          if (rsp.success) {
+            userMgr.setCurrent(rsp.data)
+            this.props.navigation.navigate('Home');
+          } else {
+            Alert.alert('登录失败', rsp.message);
+          }
+        })
       } else {
         Alert.alert('登录失败', x.message);
       }
@@ -111,8 +113,8 @@ export default class Login extends Component {
               </Body>
             </Right>
           </ListItem>
-          <Button block rounded style={styles.loginBtn} onPress={this._login}>
-            <Text style={{color:'#fff'}}>登录</Text>
+          <Button disabled={this.state.logining} block rounded style={styles.loginBtn} onPress={this._login}>
+            <Text style={{ color: '#fff' }}>登录</Text>
           </Button>
         </Content>
         <Image
@@ -125,17 +127,18 @@ export default class Login extends Component {
 }
 
 const styles = StyleSheet.create({
-  loginBtn: { marginTop: 40, marginHorizontal: 40 },
+  loginBtn: { marginTop: 60, marginHorizontal: 40 },
   bg: {
     width: width,
-    height: 300
+    height: 400
   },
   item: {
     paddingHorizontal: 40,
+    paddingVertical: 5,
   },
   formContainer: {
     flex: 1,
-    marginTop: 30,
+    marginTop: 50,
   },
   logo: {
     justifyContent: 'center', alignSelf: 'center',

@@ -55,22 +55,24 @@ class Home extends Component {
 
     renderToDoList = () => {
         var items = [];
-        this.state.todoList.forEach(x => {
+        this.state.todoList.forEach(item => {
             items.push((
-                <ListItem key={x.id} onPress={() => {
-                    this._editManifest(x);
-                }}>
-                    <Thumbnail style={styles.itemThum} source={require('./img/icon_fqld.png')} />
-                    <Body style={{ marginLeft: 5 }}>
-                        <Text>联单号码：{x.code}</Text>
-                        <Text note>发运时间：{moment(x.departureTime).format('YYYY-MM-DD HH:mm')}</Text>
-                        <Text note>当前状态：{x.state}  转运数量(吨)：{x.quantity} </Text>
-                        {
-                            x.state == '经营单位退回'
-                            && <Text style={{ color: '#f5222d', textAlign: 'left' }}>原因：{x.backReason}</Text>
-                        }
-                    </Body>
-                </ListItem>));
+                <TouchableOpacity onPress={this._onPress} activeOpacity={0.5} key={item.id.toString()} >
+                    <View style={[styles.item]}>
+                        <View style={styles.itemLeft}><Image style={{ width: 45, height: 45 }} source={require('./img/icon_fqld.png')} /></View>
+                        <View style={styles.itemRight}>
+                            <Text >联单号码：{item.code}  </Text>
+                            <Text note>发运时间：{moment(item.departureTime).format('YYYY-MM-DD HH:mm')}</Text>
+                            <Text note>当前状态：{item.state}  转运数量(吨)：{item.quantity}</Text>
+                            {
+                                item.state == '经营单位退回'
+                                && <Text style={{ color: '#f5222d', textAlign: 'left' }}>原因：{item.backReason}</Text>
+                            }
+                        </View>
+                    </View>
+                </TouchableOpacity>
+
+            ));
         })
         return items;
     }
@@ -79,7 +81,7 @@ class Home extends Component {
             <Container>
                 <Content>
                     <CardItem cardBody style={{ justifyContent: 'center' }}>
-                        <Image source={require('./img/bg_home.png')} resizeMode='cover' style={{ flex: 1, height: 200 }} />
+                        <Image source={require('./img/bg_home.png')} resizeMode='cover' style={{ flex: 1, height: 220 }} />
                         <Body style={{ position: 'absolute', alignItems: 'center', alignSelf: 'center' }} >
                             <Icon active name="file-text-o" type='FontAwesome' style={styles.iconNew} />
                             <Button onPress={this._newManifest} style={styles.btnNew}>
@@ -90,7 +92,7 @@ class Home extends Component {
                         <View style={styles.splitLine}></View><Text style={styles.title}> 待办联单 </Text>
                         <View style={styles.splitLine}></View>
                     </View>
-                    <List style={{ height: height - 480 }} >
+                    <ScrollView style={{ height: height - 510 }} >
                         {
                             this.state.todoList && this.state.todoList.length > 0 ?
                                 this.renderToDoList()
@@ -99,37 +101,31 @@ class Home extends Component {
                                     <Text style={{ alignSelf: 'center', margin: 10 }}>无待办项</Text>
                                 </View>
                         }
-                    </List>
+                    </ScrollView>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <View style={styles.splitLine}></View><Text style={styles.title}> 系统菜单 </Text>
                         <View style={styles.splitLine}></View>
                     </View>
-                    <CardItem style={{ marginTop: 20 }}>
-                        <Body style={{ alignItems: 'center' }} >
-                            <TouchableOpacity activeOpacity={0.5} onPress={() => {
-                                this.props.navigation.navigate('TaskList');
-                            }}>
-                                <Thumbnail square source={require('./img/icon_dbld.png')} />
-                                <Text style={styles.txtMenu}>待办联单</Text>
-                            </TouchableOpacity>
-                        </Body>
-                        <Body style={{ alignItems: 'center' }}>
-                            <TouchableOpacity activeOpacity={0.5} onPress={() => {
-                                this.props.navigation.navigate('FinishedList');
-                            }}>
-                                <Thumbnail square source={require('./img/icon_lsld.png')} />
-                                <Text style={styles.txtMenu}>历史联单</Text>
-                            </TouchableOpacity>
-                        </Body>
-                        <Body style={{ alignItems: 'center' }}>
-                            <TouchableOpacity activeOpacity={0.5} onPress={() => {
-                                this.props.navigation.navigate('Setting');
-                            }}>
-                                <Thumbnail square source={require('./img/icon_set.png')} />
-                                <Text style={styles.txtMenu}>系统设置</Text>
-                            </TouchableOpacity>
-                        </Body>
-                    </CardItem>
+                    <View style={{ marginTop: 20, flexDirection: 'row', justifyContent: 'space-around' }}>
+                        <TouchableOpacity style={{ alignItems: 'center' }} activeOpacity={0.5} onPress={() => {
+                            this.props.navigation.navigate('TaskList');
+                        }}>
+                            <Thumbnail square source={require('./img/icon_dbld.png')} />
+                            <Text style={styles.txtMenu}>待办联单</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{ alignItems: 'center' }} activeOpacity={0.5} onPress={() => {
+                            this.props.navigation.navigate('FinishedList');
+                        }}>
+                            <Thumbnail square source={require('./img/icon_lsld.png')} />
+                            <Text style={styles.txtMenu}>历史联单</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{ alignItems: 'center' }} activeOpacity={0.5} onPress={() => {
+                            this.props.navigation.navigate('Setting');
+                        }}>
+                            <Thumbnail square source={require('./img/icon_set.png')} />
+                            <Text style={styles.txtMenu}>系统设置</Text>
+                        </TouchableOpacity>
+                    </View>
                 </Content>
             </Container >
         );
@@ -144,7 +140,7 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     txtMenu: {
-        marginTop: 5,
+        marginVertical: 15,
         fontSize: 16
     },
     itemThum: {
@@ -172,6 +168,19 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         justifyContent: 'center',
         backgroundColor: 'transparent',
+    },
+    item: {
+        width: width,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 15,
+    },
+    itemLeft: {
+        width: 60
+    },
+    itemRight: {
+        flex: 1,
+        flexDirection: 'column',
     }
 });
 

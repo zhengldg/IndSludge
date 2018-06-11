@@ -172,31 +172,25 @@ class RegisterComp extends Component {
         });
     }
 
-    _selectCarryingCompany = () => {
-        this.setState({ isPickingCarringCompany: true, parentParams: { CompanyType: 2 } })
-    }
-
-    _selectProcessedCompany = () => {
-        this.setState({ isPickingProcessedCompany: true, parentParams: { CompanyType: 4 } })
-    }
-
-    _onSelectedCompany = (item) => {
+    _selectCarryingCompany = (item) => {
         var form = this.state.form;
-        if (this.state.isPickingCarringCompany) {
-            form = Object.assign(form, { carryingCompanyId: item.id, carryingCompanyName: item.name });
-            this.setState({ form, isPickingCarringCompany: false })
-        }
-        if (this.state.isPickingProcessedCompany) {
-            form = Object.assign(form, { processedCompanyId: item.id, processedCompanyName: item.name });
-            this.setState({ form, isPickingProcessedCompany: false })
-        }
+        form.carryingCompanyId = item.id;
+        form.carryingCompanyName = item.name;
+        this.setState({ form })
+    }
+
+    _selectProcessedCompany = (item) => {
+        var form = this.state.form;
+        form.processedCompanyId = item.id;
+        form.processedCompanyName = item.name;
+        this.setState({ form })
     }
 
     _updateForm = (field, newVal) => {
         var form = this.state.form;
         form[field] = newVal;
         this.setState({
-            form: form
+            form
         })
     }
 
@@ -204,7 +198,6 @@ class RegisterComp extends Component {
         var form = this.state.form;
         return (
             <Container >
-                <Companys parentParams={this.state.parentParams} onSelected={this._onSelectedCompany} isModalVisible={this.state.isPickingCarringCompany || this.state.isPickingProcessedCompany} ></Companys>
                 <Content style={styles.formContainer}>
                     {
                         this.state.loading && <ActivityIndicator size="large" style={{ position: 'absolute', alignSelf: 'center' }} />
@@ -218,11 +211,11 @@ class RegisterComp extends Component {
                         </Item>
                         <Item style={styles.item}  >
                             <Label style={styles.label}>运输单位：</Label>
-                            <Input placeholder="请选择企业" onFocus={this._selectCarryingCompany} value={form.carryingCompanyName} />
+                            <Companys style={{ flex: 1 }} text={form.carryingCompanyName} parentParams={{ CompanyType: 2 }} onSelected={this._selectCarryingCompany}></Companys>
                         </Item>
                         <Item style={styles.item}  >
                             <Label style={styles.label}>经营单位：</Label>
-                            <Input placeholder="请选择企业" onFocus={this._selectProcessedCompany} value={form.processedCompanyName} />
+                            <Companys style={{ flex: 1 }} text={form.processedCompanyName} parentParams={{ CompanyType: 4 }} onSelected={this._selectProcessedCompany}></Companys>
                         </Item>
                         <Item style={styles.item} >
                             <Label style={styles.label}>转运数量：</Label>
@@ -252,28 +245,8 @@ class RegisterComp extends Component {
                         </Item>
                         <Item style={styles.item} >
                             <Label style={styles.label}>发运人签名：</Label>
-                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                                <View style={[appStyles.grayBorder, { height: 40, margin: 3, width: 140 }]} onPress={() => {
-                                    this.setState({ signVisible: true });
-                                }} >
-                                    <TouchableOpacity style={{ flex: 1 }} activeOpacity={0.5} onPress={() => {
-                                        this.setState({ signVisible: true });
-                                    }} >
-                                        <Image resizeMode='stretch' style={{
-                                            flex: 1
-                                        }} source={{ uri: this.state.form.ceneratedOperatorSignBase64 }}></Image>
-                                    </TouchableOpacity>
-                                </View>
-                                <Icon size={20} style={{ marginLeft: 5 }} type="FontAwesome" name="pinterest" onPress={() => {
-                                    this.setState({ signVisible: true });
-                                }} />
-                            </View>
-                            <Signature style={{ flex: 0 }} visible={this.state.signVisible} ok={(sign) => {
-                                const base64String = `data:image/png;base64,${sign.encoded}`;
-                                this.setState({
-                                    signVisible: false
-                                })
-                                this._updateForm('ceneratedOperatorSignBase64', base64String)
+                            <Signature style={{ flex: 1 }} imgBase64={form.ceneratedOperatorSignBase64}  ok={(base64) => {
+                                this._updateForm('ceneratedOperatorSignBase64', base64)
                             }}>
                             </Signature>
                         </Item>

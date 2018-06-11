@@ -49,17 +49,35 @@ export const AsyncStore = {
 }
 
 export const userMgr = {
+    getRemembeKey() {
+        return '_REMEMBE_';
+    },
     getCurrent() {
-        return AsyncStorage.getItem(USER_KEY).then(x => { JSON.parse(x) })
+        return AsyncStorage.getItem(USER_KEY).then(x => {
+            if (x) return JSON.parse(x);
+            else {
+                return get('u/info').then(y => {
+                    if (y.success) {
+                        return y.data;
+                    } else {
+                        return null;
+                    }
+                })
+            }
+        })
     },
     setCurrent(user) {
-        return AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
+        if (user == null) {
+            return AsyncStorage.removeItem(USER_KEY);
+        } else {
+            return AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
+        }
     }
 }
 
 export const tokenMgr = {
     clear() {
-        AsyncStorage.clear(TOKEN_KEY);
+        AsyncStorage.removeItem(TOKEN_KEY);
     },
     setToken(strToken) {
         var json = JSON.parse(strToken)

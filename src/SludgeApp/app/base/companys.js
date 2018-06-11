@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
-import { Text, TouchableOpacity, View, FlatList, Alert, StyleSheet } from "react-native";
-import { Container, Header, Icon, Content, CardItem, List, ListItem, Left, Body, Right, Thumbnail, Card, H3, Item, Input, Button, Footer } from 'native-base';
+import { Text, TouchableOpacity, View, FlatList, Alert, StyleSheet, TextInput } from "react-native";
+import { Container, Header, Content, CardItem, List, ListItem, Left, Body, Right, Thumbnail, Card, H3, Item, Input, Button, Footer } from 'native-base';
 import Modal from "react-native-modal";
 import { Toast } from '../common/util'
 import { get } from '../common/request'
 import { isEqual } from 'lodash';
 import styles from "./companys.style";
 import appStyles from "../styles";
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 class MyListItem extends Component {
     _onPress = () => {
@@ -21,7 +21,7 @@ class MyListItem extends Component {
         return (
             <TouchableOpacity onPress={this._onPress} activeOpacity={0.5} key={item.id} >
                 <View style={[styles.item]}>
-                    <View style={styles.itemLeft}><Icon name="ios-home-outline" /></View>
+                    <View style={styles.itemLeft}><Icon size={25} name={item.companyType == '产生单位' ? "home" : (item.companyType == '运输单位' ? "car" : "home")} type='FontAwesome' /></View>
                     <View style={styles.itemRight}>
                         <Text style={styles.title}>{item.name}</Text>
                         <Text note>{item.address}  {item.cityName}  {item.contact}</Text>
@@ -42,17 +42,23 @@ const comPager = {
 }
 
 export default class Companys extends Component {
-    isRequest = false;
-
     static propTypes = {
         parentParams: PropTypes.object,
-        isModalVisible: PropTypes.bool
+        onSelected: PropTypes.func,
+        onCancel: PropTypes.func,
+        text: PropTypes.string,
+        placeholder: PropTypes.string,
     }
+
+    static defaultProps = {
+        isModalVisible: false,
+        placeholder: '请选择'
+    };
 
     constructor(props) {
         super(props)
         this.state = {
-            isModalVisible: this.props.isModalVisible,
+            isModalVisible: false,
             key: '',
             selected: {},
             data: []
@@ -60,38 +66,27 @@ export default class Companys extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!isEqual(this.props.parentParams, nextProps.parentParams)) {
-            this.setState({
-                parentParams: nextProps.parentParams
-            })
-        }
-        if (nextProps.isModalVisible) {
-            this.setState({
-                isModalVisible: true,
-            }, x => {
-                this._search();
-            });
-        }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         return true;
-        // if (!isEqual(nextProps, this.props)) {
-        //     return true;
-        // }
-        // return false;
     }
 
     componentDidMount() {
-        this._search();
     }
 
-    _keyExtractor = (item, index) => item.id;
+    _keyExtractor = (item, index) => item.id.toString();
 
 
     _onPressItem = (item) => {
-        this.setState({ selected: item, isModalVisible: false });
+        this.setModelVisible(false);
+        this.props.onSelected && this.props.onSelected(item);
     };
+
+    _onCancel = () => {
+        this.setModelVisible(false);
+        this.props.onCancel && this.props.onCancel(item);
+    }
 
     _renderItem = ({ item }) => (
         <MyListItem
@@ -102,8 +97,20 @@ export default class Companys extends Component {
         />
     );
 
+    setModelVisible(visible) {
+        this.setState({
+            isModalVisible: visible
+        })
+        if (visible) {
+            this._search();
+        }
+    }
+
+    onPressPick = () => {
+        this.setModelVisible(true);
+    }
+
     _requestData = (type) => {
-        this.isRequest = true;
         var parentParams = this.props.parentParams;
         var params = Object.assign({ pageSize: comPager.pageSize, pageIndex: comPager.pageIndex, key: this.state.key }, parentParams);
         return get('company/pagedCompany', params)
@@ -127,7 +134,6 @@ export default class Companys extends Component {
                     text: '请求发生错误'
                 })
             }).done(x => {
-                this.isRequest = false;
             })
     }
 
@@ -136,14 +142,11 @@ export default class Companys extends Component {
         this._requestData();
     }
 
-    onModalHide = () => {
-        this.props.onSelected && this.props.onSelected(this.state.selected);
-    }
-
     _loadMore = () => {
-        if (!this.isRequest) {
+        if (this.onEndReachedCalledDuringMomentumFlag === false) {
             if (comPager.hasNextPage()) {
                 this._requestData('more');
+                this.onEndReachedCalledDuringMomentumFlag = true;
             }
         }
     }
@@ -169,42 +172,57 @@ export default class Companys extends Component {
 
                     }
                 } />
-            <Icon name="ios-search" onPress={this._search} />
+            <Icon name="search" type='FontAwesome' onPress={this._search} />
         </Item>);
     }
 
+    onEndReachedCalledDuringMomentum = () => {
+        this.onEndReachedCalledDuringMomentumFlag = false;
+    }
 
     render() {
         return (
-            <Modal
-                onBackdropPress={() => { this.setState({ isModalVisible: false, flex: 1 }) }}
-                onModalHide={this.onModalHide}
-                isVisible={this.state.isModalVisible}
-                backdropOpacity={0.5}
-            >
-                <View style={styles.container}>
-                    <View style={[styles.modalContent]}>
-                        <Item>
-                            <Input placeholder="请输入企业名称\联系人" value={this.state.key}
-                                onChangeText={x => {
-                                    this.setState({ key: x }, y => {
-                                        this._search();
-                                    });
-                                }} />
-                            <Icon name="ios-search" onPress={this._search} />
-                        </Item>
-                        <FlatList
-                            data={this.state.data}
-                            extraData={this.state}
-                            keyExtractor={this._keyExtractor}
-                            renderItem={this._renderItem}
-                            ItemSeparatorComponent={() => <View style={appStyles.divider} />}
-                            onEndReached={this._loadMore} onEndReachedThreshold={1.5}
-                            ListEmptyComponent={this.emptyComponent}
-                        />
-                    </View>
+            <View style={{ ...this.props.style }}>
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                    <TextInput placeholder={this.props.placeholder} value={this.props.text} style={{ flex: 1 }} onFocus={this.onPressPick}></TextInput>
+                    <Icon size={20} style={{ margin: 5 }} type="FontAwesome" name="angle-down" onPress={this.onPressPick} ></Icon>
                 </View>
-            </Modal>
+                <Modal
+                    onBackdropPress={this._onCancel}
+                    isVisible={this.state.isModalVisible}
+                    backdropOpacity={0.5}
+                >
+                    <View style={styles.container}>
+                        <View style={[styles.modalContent]}>
+                            <Item style={{ paddingHorizontal: 15 }}>
+                                <Input placeholder="请输入企业名称\联系人" value={this.state.key}
+                                    onChangeText={x => {
+                                        this.setState({ key: x }, y => {
+                                            this._search();
+                                        });
+                                    }} />
+                                <Icon name="search" size={20} onPress={this._search} />
+                            </Item>
+                            <FlatList style={{ flex: 1 }}
+                                onScrollBeginDrag={this.onEndReachedCalledDuringMomentum.bind(this)}
+                                data={this.state.data}
+                                extraData={this.state}
+                                keyExtractor={this._keyExtractor}
+                                renderItem={this._renderItem}
+                                ItemSeparatorComponent={() => <View style={appStyles.divider} />}
+                                onEndReached={this._loadMore.bind(this)} onEndReachedThreshold={0.01}
+                                ListEmptyComponent={this.emptyComponent}
+                            />
+                            <View style={{ borderTopColor: '#d9d9d9', borderTopWidth: StyleSheet.hairlineWidth, borderStyle: 'solid', height: 60, flexDirection: "row", justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <View style={{ marginRight: 20 }} >
+                                    <Icon.Button name="times" backgroundColor="#3b5998" onPress={this._onCancel}>取消</Icon.Button>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+
         );
     }
 }

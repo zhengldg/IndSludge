@@ -282,7 +282,7 @@ namespace GFAPP.Web.Controllers
                 || x.ProcessedCompanyId == companyId
                 )
                 .Include(x => x.GeneratedCompany).Include(x => x.ProcessedCompany)
-                .OrderByDescending(x => x.Code).Take(3).AsNoTracking().ToListAsync();
+                .OrderByDescending(x => x.Code).Take(10).AsNoTracking().ToListAsync();
             var items = Mapper.Map<List<EleDuplicateMissionDto>>(missions);
             return new ObjectResult(items);
         }

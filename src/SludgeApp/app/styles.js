@@ -24,5 +24,5 @@ export default StyleSheet.create({
     },
     grayBorder: {
         borderWidth: StyleSheet.hairlineWidth, borderColor: '#d9d9d9', borderStyle: 'solid'
-    }
+    },
 })
