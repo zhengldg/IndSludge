@@ -109,9 +109,9 @@ class RegisterComp extends Component {
                 Alert.alert('注册失败', x.message);
             }
         }).catch(x => {
-            Toast.danger('登录失败，请检查网络连接是否正常');
+            Toast.danger('注册失败，请检查网络连接是否正常');
         }).done(x => {
-            if (this.loading) {
+            if (this.state.loading) {
                 this.setState({ loading: false });
             }
         });
@@ -192,7 +192,7 @@ class RegisterComp extends Component {
                         </Item>
                     </Form>
                     <Button disabled={this.state.loading} block rounded style={styles.loginBtn} onPress={this._login}>
-                        <Text>注册</Text>
+                        <Text>注  册</Text>
                     </Button>
                 </Content>
             </Container>);
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     , label: {
         fontWeight: 'bold'
     },
-    loginBtn: { marginTop: 40, marginHorizontal: 40 },
+    loginBtn: { marginTop: 40, marginHorizontal: 40,backgroundColor: '#1890ff' },
     item: {
     },
     formContainer: {

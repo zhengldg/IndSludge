@@ -91,7 +91,7 @@ namespace GFAPP.Web.Controllers
         public async Task<ApiResult> ChangePassword([FromBody]ChangePasswordInput input)
         {
             ApiResult result = new ApiResult();
-            var user = await userManager.FindByNameAsync(input.UserName);
+            var user = await userManager.FindByNameAsync(session.Username);
             if(user != null)
             {
                 var changeRs = await userManager.ChangePasswordAsync(user, input.CurrentPassword, input.NewPassword);

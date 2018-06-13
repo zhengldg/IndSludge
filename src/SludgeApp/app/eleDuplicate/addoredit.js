@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     , label: {
         fontWeight: 'bold'
     },
-    saveBtn: { width: 300, marginHorizontal: 10, },
+    saveBtn: { width: 100, marginHorizontal: 10,backgroundColor: '#1890ff' },
     item: {
     },
     formContainer: {

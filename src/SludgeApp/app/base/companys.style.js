@@ -34,7 +34,7 @@ export default StyleSheet.create({
     },
     itemLeft: {
         width: 30,
-        margin:10
+        margin: 10
     },
     itemRight: {
         flexDirection: 'column',

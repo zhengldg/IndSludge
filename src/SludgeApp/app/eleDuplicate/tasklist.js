@@ -28,7 +28,7 @@ class MyListItem extends Component {
         return (
             <TouchableOpacity onPress={this._onPress} activeOpacity={0.5} key={item.id.toString()} >
                 <View style={[styles.item]}>
-                    <View style={styles.itemLeft}><Image style={{ width: 45, height: 45 }} source={require('../home/img/icon_fqld.png')} /></View>
+                    <View style={styles.itemLeft}><Image style={{ width: 60, height: 60 }} source={require('../home/img/icon_fqld.png')} /></View>
                     <View style={styles.itemRight}>
                         <Text style={styles.title}>联单号码：{item.code}  </Text>
                         <Text note>发运时间：{moment(item.departureTime).format('YYYY-MM-DD HH:mm')}</Text>
@@ -202,7 +202,7 @@ export default class TaskList extends Component {
                     <Icon name="search" size={20} onPress={this._search} />
                 </Item>
                 <FlatList
-                onScrollBeginDrag={this.onEndReachedCalledDuringMomentum.bind(this)}
+                    onScrollBeginDrag={this.onEndReachedCalledDuringMomentum.bind(this)}
                     data={this.state.data}
                     extraData={this.state}
                     keyExtractor={this._keyExtractor}
@@ -230,10 +230,10 @@ const styles = StyleSheet.create({
         width: width,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 15,
+        paddingVertical: 10
     },
     itemLeft: {
-        width: 60
+        marginHorizontal: 20
     },
     itemRight: {
         flex: 1,

@@ -20,7 +20,7 @@ export default class Login extends Component {
   }
 
   componentDidMount = async () => {
-    var user = await AsyncStore.getObj('remembeUser');
+    var user = await AsyncStore.getObj(userMgr.getRemembeKey());
     if (user) {
       this.setState(user)
     }
@@ -33,7 +33,7 @@ export default class Login extends Component {
       return;
     }
     if (!this.state.password) {
-      Alert.alert('请输入用户名');
+      Alert.alert('请输入密码');
       return;
     }
     this.setState({ logining: true });
@@ -114,7 +114,7 @@ export default class Login extends Component {
             </Right>
           </ListItem>
           <Button disabled={this.state.logining} block rounded style={styles.loginBtn} onPress={this._login}>
-            <Text style={{ color: '#fff' }}>登录</Text>
+            <Text style={{ color: '#fff' }}>登  录</Text>
           </Button>
         </Content>
         <Image
@@ -127,7 +127,7 @@ export default class Login extends Component {
 }
 
 const styles = StyleSheet.create({
-  loginBtn: { marginTop: 60, marginHorizontal: 40 },
+  loginBtn: { marginTop: 60, marginHorizontal: 40, backgroundColor: '#1890ff' },
   bg: {
     width: width,
     height: 400

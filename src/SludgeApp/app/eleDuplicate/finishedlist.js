@@ -27,7 +27,7 @@ class MyListItem extends Component {
         return (
             <TouchableOpacity onPress={this._onPress} activeOpacity={0.5} key={item.id.toString()} >
                 <View style={[styles.item]}>
-                    <View style={styles.itemLeft}><Image style={{ width: 50, height: 50 }} source={require('./img/icon_ybj.png')} /></View>
+                    <View style={styles.itemLeft}><Image style={{ width: 60, height: 60 }} source={require('./img/icon_ybj.png')} /></View>
                     <View style={styles.itemRight}>
                         <Text style={styles.title}>联单号码：{item.code} </Text>
                         <Text note>转运数量(吨)：{item.quantity}       实际接收量(吨)：{item.actualQuantity}</Text>
@@ -207,10 +207,10 @@ const styles = StyleSheet.create({
         width: width,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 15,
+        paddingVertical: 10
     },
     itemLeft: {
-        width: 60,
+        marginHorizontal: 20
     },
     itemRight: {
         flex: 1,

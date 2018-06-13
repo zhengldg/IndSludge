@@ -8,6 +8,7 @@ import {
     Image,
     Dimensions,
     ScrollView,
+    RefreshControl,
     TouchableHighlight,
     TouchableOpacity
 } from 'react-native';
@@ -28,12 +29,17 @@ class Home extends Component {
         super(props)
 
         this.state = {
-            todoList: []
+            todoList: [],
+            refreshing: false
         }
     }
 
     componentDidMount() {
-        post('eleDuplicate/homeMissions')
+        this._fetchData();
+    }
+
+    _fetchData = () => {
+        return post('eleDuplicate/homeMissions')
             .then(x => {
                 this.setState({
                     todoList: x.data
@@ -53,13 +59,20 @@ class Home extends Component {
         }
     }
 
+    _onRefresh() {
+        this.setState({ refreshing: true });
+        this._fetchData().then(() => {
+            this.setState({ refreshing: false });
+        });
+    }
+
     renderToDoList = () => {
         var items = [];
         this.state.todoList.forEach(item => {
             items.push((
-                <TouchableOpacity onPress={this._onPress} activeOpacity={0.5} key={item.id.toString()} >
+                <TouchableOpacity onPress={x => { this._editManifest(item); }} activeOpacity={0.5} key={item.id.toString()} >
                     <View style={[styles.item]}>
-                        <View style={styles.itemLeft}><Image style={{ width: 45, height: 45 }} source={require('./img/icon_fqld.png')} /></View>
+                        <View style={styles.itemLeft}><Image style={{ width: 60, height: 60 }} source={require('./img/icon_fqld.png')} /></View>
                         <View style={styles.itemRight}>
                             <Text >联单号码：{item.code}  </Text>
                             <Text note>发运时间：{moment(item.departureTime).format('YYYY-MM-DD HH:mm')}</Text>
@@ -92,7 +105,8 @@ class Home extends Component {
                         <View style={styles.splitLine}></View><Text style={styles.title}> 待办联单 </Text>
                         <View style={styles.splitLine}></View>
                     </View>
-                    <ScrollView style={{ height: height - 510 }} >
+                    <ScrollView style={{ height: height - 510 }} refreshControl={<RefreshControl refreshing={this.state.refreshing}
+                        onRefresh={this._onRefresh.bind(this)}></RefreshControl>}>
                         {
                             this.state.todoList && this.state.todoList.length > 0 ?
                                 this.renderToDoList()
@@ -173,10 +187,10 @@ const styles = StyleSheet.create({
         width: width,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 15,
+        paddingVertical: 10
     },
     itemLeft: {
-        width: 60
+        marginHorizontal: 20,
     },
     itemRight: {
         flex: 1,

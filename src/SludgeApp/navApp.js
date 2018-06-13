@@ -9,6 +9,7 @@ import FinishedList from './app/eleDuplicate/finishedlist'
 import EleDuplicateDetail from './app/eleDuplicate/detail'
 import Setting from './app/setting/setting'
 import Location from './app/map/location'
+import ChangePassword from './app/account/changePassword'
 
 import { StackNavigator } from 'react-navigation'
 var NavApp = StackNavigator({
@@ -76,6 +77,12 @@ var NavApp = StackNavigator({
     screen: Location,
     navigationOptions: {
       title: '我的位置'
+    }
+  },
+  ChangePassword: {
+    screen: ChangePassword,
+    navigationOptions: {
+      title: '修改密码'
     }
   }
 },

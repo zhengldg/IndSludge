@@ -13,7 +13,7 @@ export default class Setting extends Component {
     }
 
     changePassword = () => {
-
+        this.props.navigation.navigate("ChangePassword");
     }
 
     onLocation = () => {
@@ -75,9 +75,7 @@ export default class Setting extends Component {
                 },
                 {
                     text: '确定', onPress: () => {
-                        userMgr.setCurrent(null);
-                        tokenMgr.clear();
-                        AsyncStorage.removeItem(userMgr.getRemembeKey());
+                        userMgr.clearCurrentUserData();
                         self.props.navigation.navigate('Login');
                     }
                 },
@@ -100,7 +98,7 @@ export default class Setting extends Component {
                 <View style={{ marginTop: 15 }}>
                     <View style={styles.item}>
                         <View style={styles.left}>
-                            <Icon name="lock" size={28} color='#ffa940' />
+                            <Icon name="lock" size={30} color='#ffa940' />
                         </View>
                         <TouchableOpacity activeOpacity={0.5} style={styles.right} onPress={this.changePassword}>
                             <Text style={styles.label}>修改密码</Text>
@@ -108,7 +106,7 @@ export default class Setting extends Component {
                     </View>
                     <View style={styles.item}>
                         <View style={styles.left}>
-                            <Icon name="map-marker" size={28} color='#1890ff' />
+                            <Icon name="map-marker" size={30} color='#1890ff' />
                         </View>
                         <TouchableOpacity activeOpacity={0.5} style={styles.right} onPress={this.onLocation}>
                             <Text style={styles.label}>我的位置</Text>
@@ -116,7 +114,7 @@ export default class Setting extends Component {
                     </View>
                     <View style={styles.item}>
                         <View style={styles.left}>
-                            <Icon name="trash-o" size={28} color='#73d13d' />
+                            <Icon name="trash-o" size={30} color='#73d13d' />
                         </View>
                         <TouchableOpacity activeOpacity={0.5} style={styles.right} onPress={this.clearCache}>
                             <Text style={styles.label}>清理缓存</Text>
@@ -124,7 +122,7 @@ export default class Setting extends Component {
                     </View>
                     <View style={styles.item}>
                         <View style={styles.left}>
-                            <Icon name="info-circle" size={28} color='#006d75' />
+                            <Icon name="info-circle" size={30} color='#006d75' />
                         </View>
                         <TouchableOpacity activeOpacity={0.5} style={styles.right} onPress={this.about}>
                             <Text style={styles.label}>关于</Text>
@@ -150,7 +148,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#bfbfbf', borderStyle: 'solid', borderBottomWidth: StyleSheet.hairlineWidth
     },
     left: {
-        justifyContent: 'center', alignItems: 'center', marginHorizontal: 20,
+        justifyContent: 'center', alignItems: 'center', width: 60, alignItems: 'center', justifyContent: 'center'
     },
     right: {
         flex: 1

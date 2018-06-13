@@ -3,15 +3,8 @@ import { Platform, AsyncStorage, StyleSheet, View, Text, Image, Alert, Dimension
 import { Container, Header, Content, Textarea, Separator, List, Picker, Item, Button, Input, ListItem, CheckBox, Body, Grid, Col, Row, Label, Right, Form, Radio, CardItem, Card, Left, ActionSheet } from 'native-base';
 import Finished from '../base/finished'
 import { get, post } from '../common/request'
-import { tokenMgr, userMgr, AsyncStore, Alt, Toast } from '../common/util'
-import Modal from "react-native-modal"
-import Companys from '../base/companys'
-import DatePicker from 'react-native-datepicker'
-import Signature from '../base/signature'
-import appStyles from '../styles'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 const width = Dimensions
     .get('window')
     .width, height = Dimensions.get('window').height
@@ -44,9 +37,6 @@ export default class RegisterComp extends Component {
         return (
             <Container >
                 <Content style={styles.formContainer}>
-                    {
-                        this.state.loading && <ActivityIndicator size="large" style={{ position: 'absolute', alignSelf: 'center' }} />
-                    }
                     <Separator >
                         <Text style={{ fontSize: 18, fontWeight: '400' }}>产生单位填写：</Text>
                     </Separator>
@@ -61,7 +51,7 @@ export default class RegisterComp extends Component {
                             <Text>产生单位：{form.generatedCompanyName}</Text>
                         </CardItem>
                         <CardItem style={styles.detailItem}>
-                            <Text>联系人\联系电话{form.generatedContact}  {form.generatedTelephoneNumber}</Text>
+                            <Text>联系人\联系电话：{form.generatedContact}  {form.generatedTelephoneNumber}</Text>
                         </CardItem>
                         <CardItem style={styles.detailItem}>
                             <Text>运输单位：{form.carryingCompanyName}</Text>
@@ -73,7 +63,7 @@ export default class RegisterComp extends Component {
                             <Text>经营单位：{form.processedCompanyName}</Text>
                         </CardItem>
                         <CardItem style={styles.detailItem}>
-                            <Text>联系人\联系电话{form.processedContact}  {form.processedTelephoneNumber}</Text>
+                            <Text>联系人\联系电话：{form.processedContact}  {form.processedTelephoneNumber}</Text>
                         </CardItem>
                         <CardItem style={styles.detailItem}>
                             <Text>转运数量\含水率：{form.quantity},({form.quantityPercentageOfMoisture}%)</Text>

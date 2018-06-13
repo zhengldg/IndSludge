@@ -29,7 +29,7 @@ class Finished extends Component {
                             <Text style={styles.tip}>{this.props.tip || '操作成功'}</Text>
                         </Body>
                         <Button block rounded style={styles.backBtn} onPress={this._clickFinished}>
-                            <Text style={{ color: '#fff' }}>{this.props.btnText || '返回'}</Text>
+                            <Text style={{ color: '#fff' }}>{this.props.btnText || '返  回'}</Text>
                         </Button>
                     </Card>
                 </Content>
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontSize: 18
     },
-    backBtn: { marginHorizontal: 40, marginTop: 40, marginBottom: 20 },
+    backBtn: { marginHorizontal: 40, marginTop: 40, marginBottom: 20,backgroundColor: '#1890ff' },
 });
 
 //make this component available to the app

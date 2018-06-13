@@ -154,7 +154,8 @@ namespace GFAPP.Web
 
             services.AddIdentity<UserInfo, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddErrorDescriber<ZhcnIdentityErrorDescriber>();
 
             services.Configure<IdentityOptions>(options =>
             {

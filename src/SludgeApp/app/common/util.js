@@ -49,6 +49,11 @@ export const AsyncStore = {
 }
 
 export const userMgr = {
+    clearCurrentUserData() {
+        this.setCurrent(null);
+        tokenMgr.clear();
+    },
+
     getRemembeKey() {
         return '_REMEMBE_';
     },
